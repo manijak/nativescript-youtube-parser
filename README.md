@@ -13,7 +13,7 @@ Run  `npm i nativescript-youtube-parser` in the ROOT directory of your project.
 
 #### getURL(url, format)
 * url - 'watch video' page on YouTube.
-* format - Object with `quality` (small, medium, high) and `container` (flv, 3pg, mp4, webm). 
+* format - Object ```{ quality: 'small | medium | high', container: 'mp4 | flv | 3pg | webm' }```
 * return value - A promise object to resolve with an array of URL/format info objects that match the requested format.
 ```js
 var youtubeParser = require('nativescript-youtube-parser');
