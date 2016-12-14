@@ -3,7 +3,7 @@
 
 # NativeScript YouTube Parser
 A util to extract raw video-URLs and format information from a YouTube-video page. This way you can play YouTube videos in the native video player.
-The plugin is based on npm package `youtube-parser` and adapted to the NativeScript framework (removed cli & non needed dependencies). 
+The plugin is based on npm package `youtube-parser` and adapted to the NativeScript framework (removed cli & excess dependencies). 
 Works on iOS and Android. 
 
 ## Installation
