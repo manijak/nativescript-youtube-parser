@@ -1,0 +1,12 @@
+{
+ "name": "nativescript-youtube-parser",
+ "version": "1.0.0",
+ "description": "Simple YouTube video parser",
+ "main": "index.js",
+ "nativescript": {
+   "platforms": {
+     "ios": "2.3.0",
+     "android": "2.3.0"
+   	}
+	}
+}
