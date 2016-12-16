@@ -8,5 +8,25 @@
      "ios": "2.3.0",
      "android": "2.3.0"
    	}
-	}
+	},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manijak/nativescript-youtube-parser.git"
+  },
+  "keywords": [
+    "NativeScript",
+    "YouTube",
+    "Parser",
+    "video",
+    "mp4",
+    "webm",
+    "JavaScript",
+    "iOS",
+    "Android",
+    "manijak"
+  ],
+  "author": "Nedim Erkocevic <nedim@fkzeljo.com> (https://github.com/manijak)",
+  "bugs": "https://github.com/manijak/nativescript-youtube-parser/issues",
+  "license": "MIT",
+  "homepage": "https://github.com/manijak/nativescript-youtube-parser"
 }
