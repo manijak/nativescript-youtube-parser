@@ -32,7 +32,7 @@ function extractConfigData(html) {
 }
 
 function fetchMetadata(id) {
-  var url = 'http://www.youtube.com/watch?v=' + id;
+  var url = 'https://www.youtube.com/watch?v=' + id;
 
   return new Promise(function (fulfill, reject) {
     var xhr = new XMLHttpRequest();
@@ -44,10 +44,12 @@ function fetchMetadata(id) {
         jsonStr = extractConfigData(xhr.response);
         fulfill(JSON.parse(jsonStr));
       } catch (e) {
+        console.log("YOUTUBE_PARSE_ERROR: ", e);
         reject(jsonStr);
       }
     };
     xhr.onerror = function(e) {
+      console.log("YOUTUBE_PARSE_ERROR: ", e);
       reject(e);
     };
     xhr.send();
