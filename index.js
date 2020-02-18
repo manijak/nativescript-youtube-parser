@@ -1,10 +1,10 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-var common = require("./index-common");
+import common, { URL, FORMATS } from "./index-common";
 global.moduleMerge(common, exports);
 
 function getVideoID(url) {
-  var urlObj = common.URL.parseURL(url);
+  var urlObj = URL.parseURL(url);
   if (urlObj) {
     return urlObj.hostname === 'youtu.be' ? urlObj.path.slice(1) : urlObj.query.v;
   }
@@ -143,7 +143,7 @@ function parseFormats(info) {
   }
 
   formats = formats.map(function (format) {
-    var data = common.URL.parseQuery(format.url);
+    var data = URL.parseQuery(format.url);
     if (data.mime && data.mime.indexOf('rtmp') === 0) {
       format.rtmp = true;
     }
@@ -156,7 +156,7 @@ function parseFormats(info) {
       format.url = '';
     }
 
-    var meta = common.FORMATS[data.itag];
+    var meta = FORMATS[data.itag];
     if (!meta) {
       console.warn('No format metadata for itag ' + data.itag + ' found');
       meta = {};
@@ -211,39 +211,33 @@ function findBestFormats(availableFormats, requestedFormat) {
   return formats;
 }
 
-module.exports = {
-  getMetadata: function (url) {
-    return new Promise(function (fulfill, reject) {
-      var videoID = getVideoID(url);
-      if (!videoID) {
-        reject(new Error('Unable to get video id.'));
-        return;
-      }
-      fetchMetadata(videoID)
-      .then(
-        function (d) {
-          var info = JSON.parse(d.args.player_response);
-          if (info.status === 'fail') {
-            reject(new Error('Failed in loading metadata.'));
-            return;
-          }
-
-          info.format = parseFormats(info);
-          fulfill(info);
+export function getMetadata(url) {
+  return new Promise(function (fulfill, reject) {
+    var videoID = getVideoID(url);
+    if (!videoID) {
+      reject(new Error('Unable to get video id.'));
+      return;
+    }
+    fetchMetadata(videoID)
+      .then(function (d) {
+        var info = JSON.parse(d.args.player_response);
+        if (info.status === 'fail') {
+          reject(new Error('Failed in loading metadata.'));
+          return;
         }
-      );
-    });
-  },
-  getURL: function (url, format) {    
-    return this.getMetadata(url).then(
-      function (d) {
-        var best = findBestFormats(d.format, format);
-        if (best && best.length > 0) {
-          return best;
-        } else {
-          throw new Error('Requested format not found.');
-        }
-      }
-    );
-  }
-};
+        info.format = parseFormats(info);
+        fulfill(info);
+      });
+  });
+}
+export function getURL(url, format) {
+  return this.getMetadata(url).then(function (d) {
+    var best = findBestFormats(d.format, format);
+    if (best && best.length > 0) {
+      return best;
+    }
+    else {
+      throw new Error('Requested format not found.');
+    }
+  });
+}

@@ -30,6 +30,9 @@ youtubeParser.getURL('https://youtu.be/C_vqnySNhQ0', { quality: 'medium', contai
 
 ## Changelog
 
+**2.0.0**
+* Code refactor, api-changes
+
 **1.1.0**
 * Fixed an https issue on Android that would cause the plugin not to work
 
