@@ -1,3 +1,6 @@
+**NOT MAINTAINED - SHOULD NOT BE USED IN PRODUCTION**
+This is a html-parser, use with caution. Your app could be suspended from appstores.
+
 [![npm](https://img.shields.io/npm/v/nativescript-youtube-parser.svg)](https://www.npmjs.com/package/nativescript-youtube-parser)
 [![npm](https://img.shields.io/npm/dt/nativescript-youtube-parser.svg?label=npm%20downloads)](https://www.npmjs.com/package/nativescript-youtube-parser)
 
