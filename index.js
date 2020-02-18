@@ -1,4 +1,5 @@
 'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
 var common = require("./index-common");
 global.moduleMerge(common, exports);
 
@@ -59,8 +60,8 @@ function fetchMetadata(id) {
 function splitValues(info) {
   [
     'keywords',
-    'fmt_list',
-    'fexp',
+    'formats',
+    'adaptiveFormats',
     'watermark'
   ].forEach(function(key) {
     if (!info[key]) {
@@ -134,25 +135,25 @@ function mergeObjects(a, b) {
 function parseFormats(info) {
   var formats = [];
 
-  if (info.url_encoded_fmt_stream_map) {
-    formats = formats.concat(info.url_encoded_fmt_stream_map.split(','));
+  if (info.streamingData.formats) {
+    formats = formats.concat(info.streamingData.formats);
   }
-  if (info.adaptive_fmts) {
-    formats = formats.concat(info.adaptive_fmts.split(','));
+  if (info.streamingData.adaptiveFormats) {
+    formats = formats.concat(info.streamingData.adaptiveFormats);
   }
 
   formats = formats.map(function (format) {
-    var data = common.URL.parseQuery(format);
-    if (data.conn && data.conn.indexOf('rtmp') === 0) {
-      data.rtmp = true;
+    var data = common.URL.parseQuery(format.url);
+    if (data.mime && data.mime.indexOf('rtmp') === 0) {
+      format.rtmp = true;
     }
 
     try {
-      data.url = decodeURIComponent(data.url);
-      data.type = decodeURIComponent(data.type);
+      format.url = decodeURIComponent(format.url);
+      format.type = decodeURIComponent(data.mime);
     } catch (err) {
       console.warn('Error occurred at decodeURIComponent: ' + err.message);
-      data.url = '';
+      format.url = '';
     }
 
     var meta = common.FORMATS[data.itag];
@@ -161,8 +162,9 @@ function parseFormats(info) {
       meta = {};
     }
 
-    return mergeObjects(data, meta);
-  });
+    let merged = mergeObjects(format, meta);
+    return merged;
+  }).filter((item) => item.container);
 
   formats.sort(sortFormats);
   return formats;
@@ -220,19 +222,19 @@ module.exports = {
       fetchMetadata(videoID)
       .then(
         function (d) {
-          var info = d.args;
+          var info = JSON.parse(d.args.player_response);
           if (info.status === 'fail') {
             reject(new Error('Failed in loading metadata.'));
             return;
           }
-          splitValues(info);
+
           info.format = parseFormats(info);
           fulfill(info);
         }
       );
     });
   },
-  getURL: function (url, format) {
+  getURL: function (url, format) {    
     return this.getMetadata(url).then(
       function (d) {
         var best = findBestFormats(d.format, format);
