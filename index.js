@@ -1,10 +1,10 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-import common, { URL, FORMATS } from "./index-common";
+var common = require("./index-common");
 global.moduleMerge(common, exports);
 
 function getVideoID(url) {
-  var urlObj = URL.parseURL(url);
+  var urlObj = common.URL.parseURL(url);
   if (urlObj) {
     return urlObj.hostname === 'youtu.be' ? urlObj.path.slice(1) : urlObj.query.v;
   }
@@ -143,7 +143,7 @@ function parseFormats(info) {
   }
 
   formats = formats.map(function (format) {
-    var data = URL.parseQuery(format.url);
+    var data = common.URL.parseQuery(format.url);
     if (data.mime && data.mime.indexOf('rtmp') === 0) {
       format.rtmp = true;
     }
@@ -156,7 +156,7 @@ function parseFormats(info) {
       format.url = '';
     }
 
-    var meta = FORMATS[data.itag];
+    var meta = common.FORMATS[data.itag];
     if (!meta) {
       console.warn('No format metadata for itag ' + data.itag + ' found');
       meta = {};
@@ -231,7 +231,7 @@ export function getMetadata(url) {
   });
 }
 export function getURL(url, format) {
-  return this.getMetadata(url).then(function (d) {
+  return getMetadata(url).then(function (d) {
     var best = findBestFormats(d.format, format);
     if (best && best.length > 0) {
       return best;
