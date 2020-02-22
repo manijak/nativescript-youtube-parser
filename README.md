@@ -30,6 +30,9 @@ youtubeParser.getURL('https://youtu.be/C_vqnySNhQ0', { quality: 'medium', contai
 
 ## Changelog
 
+**2.0.1**
+* Fixed issue with common.js include
+
 **2.0.0**
 * Code refactor, api-changes
 
